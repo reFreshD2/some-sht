@@ -1,0 +1,46 @@
+.main2 > *:not([data-print])            { display: none;}
+[data-topline]                          { display: none;}
+.user-advert-control-panel              { display: none;}
+.content .path                          { display: none;}
+td.right                                { display: none;}
+[data-print] h1                         { color: #000;}
+.content .b-link                        { color: #000;}
+.b-media-cont_theme_ferry-dark[data-print] { display: block;}
+.b-media-cont_theme_ferry-dark[data-print] .b-ico_type_ferry-dark { background: none !important;}
+.b-media-cont_theme_ferry-dark[data-print] .b-ico_type_ferry-dark:before { content: url('//c.rdrom.ru/skin/parom-logo-black.svg?v=1'); width: 53px; height: 35px; display: block;}
+.b-ico_type_deliver-from[data-print]                { background: none !important;}
+.b-ico_type_deliver-from[data-print]:before         { content: url('//c.rdrom.ru/skin/off-black-16x16.svg?v=1'); width: 16px; height: 16px; display: block;}
+.b-ico_type_deliver-in[data-print]                  { background: none !important;}
+.b-ico_type_deliver-in[data-print]:before           { content: url('//c.rdrom.ru/skin/in-black-16x16.svg?v=1'); width: 16px; height: 16px; display: block;}
+.b-triggers                                         { display: none;}
+
+[data-print="advert"] * { -webkit-print-color-adjust: exact; }
+[data-print="advert"] .clear,
+[data-print="advert"] .b-clear,
+[data-print="advert"] h1,
+[data-print="advert"] h1 + .b-media-cont,
+[data-print="advert"] .sb-credit-button,
+[data-print="advert"] .b-sticker,
+[data-print="advert"] .b-ico,
+[data-print="advert"] .expandFoto,
+[data-print="advert"] .b-button,
+[data-print="advert"] .img > .relative,
+[data-print="advert"] #candy_center_top,
+[data-print="advert"] .img > br,
+[data-print="advert"] .b-fieldset_theme_island,
+[data-print="advert"] .b-fieldset_theme_island + p,
+[data-print="advert"] .user-advert-control-panel,
+[data-print="advert"] .b-triggers_text-notif .b-triggers__item,
+[data-print="advert"] .adv-text > *:nth-last-child(-n+5),
+[data-print="advert"] .b-media-cont_theme_phone .b-link,
+[data-print="advert"] .autoSeeOther                             { display: none !important; }
+[data-print="advert"] .b-triggers_text-notif    { display: inline;}
+[data-print="advert"] .b-triggers_theme_dashed-buttons .b-link_dashed { border: none;}
+[data-print="advert"] .b-triggers_text-notif .b-triggers__text      { color: #000;}
+[data-print="advert"] .b-js_close           { display: inline;}
+[data-print="advert"] .b-media-cont_theme_dot { background: #db001b !important;}
+[data-print="advert"] .b-ico_type_phone                  { display: inline-block !important;}
+[data-print="advert"] .b-ico_type_phone                  { background: none;}
+[data-print="advert"] .b-ico_type_phone:before           { content: url('//c.rdrom.ru/skin/phone.svg'); width: 15px; height: 16px; display: block;}
+[data-print="advert"] .auto .img                         { width: 50%;}
+[data-print="advert"] #big_photos .b-media-cont .relative:nth-child(n+4) { display: none;}

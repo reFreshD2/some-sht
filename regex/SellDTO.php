@@ -3,14 +3,13 @@
 class SellDTO
 {
     private array $properties;
+    private int $price;
+    private string $title;
 
-    public function __construct(array $properties)
+    public function __construct(string $title, int $price, array $properties)
     {
         $this->properties = $properties;
-    }
-
-    public function getPropertyValue(string $name)
-    {
-        return $this->properties[$name] ?? null;
+        $this->price = $price;
+        $this->title = $title;
     }
 }

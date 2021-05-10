@@ -6,18 +6,29 @@ function parseDrom(string $url)
 {
     $doc = file_get_contents($url);
     $doc = mb_convert_encoding($doc, "utf-8", "windows-1251");
-    $doc = str_replace('&nbsp;', ' ', $doc);
-    $doc = str_replace('<!-- -->', '', $doc);
+    $replaced = [
+        '/<span.*?>/',
+        '/<a.*?>/',
+        '/<\/span>/',
+        '/<\/a>/',
+        '/&nbsp;/',
+        '/<!-- -->/',
+    ];
+    $doc = preg_replace($replaced, '', $doc);
 
     $properties = [];
     preg_match_all(
-        '/<tr.*?><th.*?>(?\'name\'[А-Яа-я,\s]+)<\/th><td.*?>(<span.*?><a.*?>|<span.*?>|<a.*?>|)(?\'value\'[А-Яа-я.,\s\d]+)(<\/span>|<\/a><\/span>|<\/a>|)<\/td><\/tr>/u',
+        '/<tr.*?><th.*?>(?\'name\'[А-Яа-я,\s]+)<\/th><td.*?>(?\'value\'[А-Яа-я.,X\s\d]+)<\/td><\/tr>/u',
         $doc,
         $properties,
         PREG_SET_ORDER);
     $properties = castTypeToProperties($properties);
+    $price = [];
+    preg_match_all('/(\d+)\?/', $doc, $price, PREG_SET_ORDER);
+    $title = [];
+    preg_match_all('/<h1.*?>(.+)<\/h1>/', $doc, $title, PREG_SET_ORDER);
 
-    $selling = new SellDTO($properties);
+    $selling = new SellDTO(getMatch($title), (int) getMatch($price), $properties);
     var_dump($selling);
 }
 
@@ -51,6 +62,10 @@ function castTypeToProperties(array $properties): array
         }
         return $property;
     }, $properties);
+}
+
+function getMatch(array $match): string {
+    return $match[0][1];
 }
 
 parseDrom('regex/drom.html');
