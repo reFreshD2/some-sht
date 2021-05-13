@@ -28,7 +28,7 @@ function parseDrom(string $url)
     $title = [];
     preg_match_all('/<h1.*?>(.+)<\/h1>/', $doc, $title, PREG_SET_ORDER);
 
-    $selling = new SellDTO(getMatch($title), (int) getMatch($price), $properties);
+    $selling = new SellDTO(getMatch($title), (int)getMatch($price), $properties);
     var_dump($selling);
 }
 
@@ -64,8 +64,53 @@ function castTypeToProperties(array $properties): array
     }, $properties);
 }
 
-function getMatch(array $match): string {
+function getMatch(array $match): string
+{
     return $match[0][1];
 }
 
-parseDrom('regex/drom.html');
+function csv(string $url)
+{
+    $doc = file_get_contents($url);
+    $doc = preg_replace_callback('/(\d+) (\d+)/', function ($matches) {
+        return sprintf('%s%s', $matches[1], $matches[2]);
+    }, $doc);
+    $replaced = [
+        '/,+/',
+        '/№/',
+        '/VIN/',
+    ];
+    $doc = preg_replace(['/,,,,\n/'], '*' . PHP_EOL, $doc);
+    $doc = preg_replace($replaced, ';', $doc);
+    $doc = preg_replace_callback('/(;\n;)([^\d])/', function ($matches) {
+        return ';' . $matches[2];
+    }, $doc);
+    $doc = preg_replace(['/\*/'], ';', $doc);
+    $url = str_replace('.', '_new.', $url);
+    $newDoc = [];
+    preg_match_all(
+        '/^;(\d{2}\.\d{2}\.\d{4});([A-Za-zА-Яа-я\s-]+);([A-Za-zА-Яа-я\s\d-]+);([A-Za-zА-Яа-я\s\d]+);(\d+|)\n;(.*);\n/um',
+        $doc,
+        $newDoc,
+        PREG_SET_ORDER
+    );
+    $f = fopen($url, 'c');
+    foreach ($newDoc as $matches) {
+        $repairs = explode(';', $matches[6]);
+        foreach ($repairs as $repair) {
+            $str = sprintf('%s;%s;%s;%s;%s;%s',
+                $matches[1],
+                trim($matches[2]),
+                strtoupper(trim($matches[3])),
+                strtoupper(trim($matches[4])),
+                $matches[5],
+                $repair
+            );
+            fwrite($f, $str . PHP_EOL);
+        }
+    }
+    fclose($f);
+}
+
+//parseDrom('regex/drom.html');
+csv('regex/misteriol.csv');
