@@ -8,6 +8,11 @@ use RuntimeException;
 
 class Server
 {
+    /**
+     * @var resource
+     */
+    private $socket;
+
     public function __construct(
         private string $serverPath
     ) {
@@ -22,6 +27,14 @@ class Server
             throw new RuntimeException("[$errCode] Cant start server - $errMsg");
         }
 
-        return stream_socket_accept($socket, -1);
+        $this->socket = $socket;
+        return stream_socket_accept($this->socket, -1);
+    }
+
+    public function close($channel): void
+    {
+        fwrite($channel, 'Bye bye ...' . PHP_EOL);
+        fclose($channel);
+        fclose($this->socket);
     }
 }
