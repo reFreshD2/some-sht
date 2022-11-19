@@ -1,0 +1,8 @@
+services:
+    App\Infrastructure\Persistence\JsonDB:
+        - '@App\Infrastructure\Persistence\Config\ConfigBuilder'
+        - !env DB_PATH
+        - !env DB_CONFIG_PATH
+
+    App\Infrastructure\Persistence\Config\ConfigBuilder:
+        - '@App\Infrastructure\Persistence\Config\ConfigValidator'

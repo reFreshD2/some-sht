@@ -1,0 +1,6 @@
+services:
+    App\Application\Chat\Server:
+        - !env SERVER_PATH
+
+    App\Application\Chat\Chat:
+        - '@App\Application\Chat\CommandReceiver'
