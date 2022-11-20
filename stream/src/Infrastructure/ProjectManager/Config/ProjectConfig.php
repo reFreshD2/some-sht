@@ -12,6 +12,11 @@ class ProjectConfig
     private array $projectConfigItems;
 
     /**
+     * @var ProjectConfigItem[][]
+     */
+    private array $taggedConfigItems;
+
+    /**
      * @throws InvalidProjectConfigurationException
      */
     public function addItem(ProjectConfigItem $item): void
@@ -20,6 +25,9 @@ class ProjectConfig
             throw new InvalidProjectConfigurationException("duplicate {$item->getClass()} definition");
         }
         $this->projectConfigItems[$item->getClass()] = $item;
+        if ($item->getTag()) {
+            $this->taggedConfigItems[$item->getTag()][] = $item;
+        }
     }
 
     /**
@@ -32,5 +40,13 @@ class ProjectConfig
         }
 
         return $this->projectConfigItems[$class];
+    }
+
+    /**
+     * @return ProjectConfigItem[]
+     */
+    public function getTaggedServices(string $tag): array
+    {
+        return $this->taggedConfigItems[$tag] ?? [];
     }
 }

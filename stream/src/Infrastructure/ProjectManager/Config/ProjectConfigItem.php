@@ -12,6 +12,8 @@ class ProjectConfigItem
          * @var ClassArgument[] $arguments
          */
         private array $arguments,
+        private ?string $tag = null,
+        private ?string $key = null,
     ) {
     }
 
@@ -26,5 +28,15 @@ class ProjectConfigItem
     public function getArguments(): array
     {
         return $this->arguments;
+    }
+
+    public function getTag(): ?string
+    {
+        return $this->tag;
+    }
+
+    public function getKey(): ?string
+    {
+        return $this->key;
     }
 }

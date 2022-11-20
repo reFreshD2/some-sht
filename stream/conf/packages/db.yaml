@@ -1,8 +1,21 @@
 services:
     App\Infrastructure\Persistence\JsonDB:
-        - '@App\Infrastructure\Persistence\Config\ConfigBuilder'
-        - !env DB_PATH
-        - !env DB_CONFIG_PATH
+        arguments:
+            - '@App\Infrastructure\Persistence\Config\ConfigBuilder'
+            - !env DB_PATH
+            - !env DB_CONFIG_PATH
 
     App\Infrastructure\Persistence\Config\ConfigBuilder:
-        - '@App\Infrastructure\Persistence\Config\ConfigValidator'
+        arguments:
+            - '@App\Infrastructure\Persistence\Config\ConfigValidator'
+
+    App\Infrastructure\Persistence\Config\ConfigValidator:
+        arguments: []
+
+    App\Domain\Chat\Repository\UserRepository:
+        arguments:
+            - '@App\Infrastructure\Persistence\JsonDB'
+
+    App\Domain\Chat\Repository\MessageRepository:
+        arguments:
+            - '@App\Infrastructure\Persistence\JsonDB'

@@ -44,6 +44,13 @@ class ProjectManager
         foreach ($classConfig->getArguments() as $argument) {
             if ($argument->isClass()) {
                 $arguments[] = $this->get($argument->getValue());
+            } elseif ($argument->getTag()) {
+                $taggedArgumentsDefinition = $this->config->getTaggedServices($argument->getTag());
+                $taggedArguments = [];
+                foreach ($taggedArgumentsDefinition as $configItem) {
+                    $taggedArguments[$configItem->getKey()] = $this->get($configItem->getClass());
+                }
+                $arguments[] = $taggedArguments;
             } else {
                 $arguments[] = $argument->getValue();
             }

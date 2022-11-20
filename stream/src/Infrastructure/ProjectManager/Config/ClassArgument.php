@@ -9,6 +9,7 @@ class ClassArgument
     public function __construct(
         private mixed $value,
         private bool $isClass,
+        private ?string $tag = null,
     ) {
     }
 
@@ -20,5 +21,10 @@ class ClassArgument
     public function getValue(): mixed
     {
         return $this->value;
+    }
+
+    public function getTag(): ?string
+    {
+        return $this->tag;
     }
 }

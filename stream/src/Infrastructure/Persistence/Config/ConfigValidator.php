@@ -21,7 +21,7 @@ class ConfigValidator
         }
 
         foreach ($configData[ConfigEnum::TABLES_KEY] as $tableColumn) {
-            if (!is_array($tableColumn) || count($tableColumn)) {
+            if (!is_array($tableColumn) || count($tableColumn) === 0) {
                 throw new InvalidConfigException('empty tables');
             }
         }

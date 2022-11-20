@@ -24,6 +24,7 @@ class JsonDB
     ) {
         $this->config = $builder->setConfigPath($configPath)
             ->build();
+        $this->dbPath = $_SERVER['PWD'] . '/' . $this->dbPath;
     }
 
     /**
@@ -104,7 +105,7 @@ class JsonDB
      */
     private function getTableData(string $table): array
     {
-        $content = file_get_contents($this->dbPath . $table . '.json');
+        $content = file_get_contents($this->dbPath . '/' . $table . '.json');
         return json_decode($content, true, 512, JSON_THROW_ON_ERROR);
     }
 
@@ -119,7 +120,7 @@ class JsonDB
             throw new JsonDBException('invalid json data');
         }
 
-        if (!file_put_contents($this->dbPath . $tableName . '.json', $content)) {
+        if (!file_put_contents($this->dbPath . '/' . $tableName . '.json', $content)) {
             throw new JsonDBException("didn't save");
         }
     }

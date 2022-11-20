@@ -1,6 +1,12 @@
 services:
     App\Application\Chat\Server:
-        - !env SERVER_PATH
+        arguments:
+            - !env SERVER_PATH
 
     App\Application\Chat\Chat:
-        - '@App\Application\Chat\CommandReceiver'
+        arguments:
+            - '@App\Application\Chat\CommandReceiver'
+            - !tagged action
+
+    App\Application\Chat\CommandReceiver:
+        arguments: []

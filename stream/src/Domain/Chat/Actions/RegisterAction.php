@@ -22,6 +22,11 @@ class RegisterAction implements ActionInterface
             return $user;
         }
 
+        if (!$message) {
+            fwrite($channel, "Enter username by \r \<username\>" . PHP_EOL);
+            return null;
+        }
+
         $userName = trim($message);
         if (empty($userName)) {
             fwrite($channel, "Enter username by \r \<username\>" . PHP_EOL);

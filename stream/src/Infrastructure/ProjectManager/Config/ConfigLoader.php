@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\ProjectManager\Config;
 
+use App\Domain\Chat\Enum\ChatFlag;
 use App\Infrastructure\ProjectManager\Exception\InvalidProjectConfigurationException;
 use DirectoryIterator;
 
@@ -47,6 +48,8 @@ class ConfigLoader
         $ndocs = 0;
         $data = \yaml_parse_file($filePath, 0, $ndocs, [
             '!env' => [$this, 'loadEnvValue'],
+            '!tagged' => fn($value) => new Tag($value),
+            '!ChatFlag' => fn($value) => constant(ChatFlag::class . '::' . $value),
         ]);
 
         if (!isset($data['services'])) {
@@ -54,13 +57,21 @@ class ConfigLoader
         }
 
         $configItems = [];
-        foreach ($data['services'] as $class => $arguments) {
-            $configItems[] = new ProjectConfigItem($class, array_map(static function ($argument) {
-                if (is_string($argument) && str_contains($argument, '@')) {
-                    return new ClassArgument(substr($argument, 1), true);
-                }
-                return new ClassArgument($argument, false);
-            }, $arguments));
+        foreach ($data['services'] as $class => $definition) {
+            $configItems[] = new ProjectConfigItem(
+                $class,
+                array_map(static function ($argument) {
+                    if ($argument instanceof Tag) {
+                        return new ClassArgument($argument->getName(), false, $argument->getName());
+                    }
+                    if (is_string($argument) && str_contains($argument, '@')) {
+                        return new ClassArgument(substr($argument, 1), true);
+                    }
+                    return new ClassArgument($argument, false);
+                }, $definition['arguments']),
+                $definition['tag'] ?? null,
+                $definition['key'] ?? null,
+            );
         }
 
         return $configItems;
@@ -69,7 +80,7 @@ class ConfigLoader
     /**
      * @throws InvalidProjectConfigurationException
      */
-    private function loadEnvValue($value, $tag, $flags): mixed
+    private function loadEnvValue($value): mixed
     {
         if (!isset($this->envValues[$value])) {
             throw new InvalidProjectConfigurationException('Undefined env ' . $value);

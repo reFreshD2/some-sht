@@ -1,0 +1,34 @@
+services:
+    App\Domain\Chat\Actions\HelpAction:
+        tag: action
+        key: !ChatFlag HELP
+        arguments: [ ]
+
+    App\Domain\Chat\Actions\ChooseChatAction:
+        tag: action
+        key: !ChatFlag CHAT
+        arguments:
+            - '@App\Domain\Chat\Repository\UserRepository'
+
+    App\Domain\Chat\Actions\GetMessagesAction:
+        tag: action
+        key: !ChatFlag MESSAGES
+        arguments:
+            - '@App\Domain\Chat\Repository\MessageRepository'
+
+    App\Domain\Chat\Actions\LeaveAction:
+        tag: action
+        key: !ChatFlag LEAVE
+        arguments: [ ]
+
+    App\Domain\Chat\Actions\RegisterAction:
+        tag: action
+        key: !ChatFlag REGISTER
+        arguments:
+            - '@App\Domain\Chat\Repository\UserRepository'
+
+    App\Domain\Chat\Actions\WriteMessageAction:
+        tag: action
+        key: !ChatFlag MESSAGE
+        arguments:
+            - '@App\Domain\Chat\Repository\MessageRepository'

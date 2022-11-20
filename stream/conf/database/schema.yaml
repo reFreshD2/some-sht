@@ -1,0 +1,9 @@
+tables:
+    messages:
+        - 'date'
+        - 'author'
+        - 'receiver'
+        - 'text'
+
+    users:
+        - 'name'
